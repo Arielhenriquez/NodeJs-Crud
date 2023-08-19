@@ -3,6 +3,7 @@ import swaggerUi from "swagger-ui-express";
 import * as swaggerDocument from "../swagger.json";
 
 import bodyParser from "body-parser";
+import { connectToDatabase } from "./dbconfig";
 
 const app: Express = express();
 app.use(bodyParser.json());
@@ -28,6 +29,10 @@ app.get("/", (req: Request, res: Response) => {
 
 app.post("/otraruta", (req: Request, res: Response) => {
   res.send(olaJson);
+});
+
+app.route("/test-connection").get((req: Request, res: Response) => {
+  connectToDatabase();
 });
 
 app
@@ -58,10 +63,6 @@ app.route("/book/:id").get((req, res) => {
   } else {
     res.status(404).send(`Book with id: ${bookParams} not found`);
   }
-});
-
-app.get("/logger", (req, res) => {
-  res.send("Hello World!");
 });
 
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));

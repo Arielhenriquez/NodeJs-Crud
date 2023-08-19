@@ -3,7 +3,7 @@
   "info": {
     "version": "1.0.0",
     "title": "Express API with Swagger",
-    "description": "A book crud application API"
+    "description": "A book CRUD application API"
   },
   "servers": [
     {
@@ -29,6 +29,21 @@
         "responses": {
           "200": {
             "description": "Fixed JSON"
+          }
+        }
+      }
+    },
+    "/test-connection": {
+      "get": {
+        "tags": ["Test endpoints"],
+        "summary": "Test the database connection",
+        "description": "Connects to the database and returns a greeting. Useful for checking if the database connection is working correctly.",
+        "responses": {
+          "200": {
+            "description": "Connection established or greeting returned."
+          },
+          "500": {
+            "description": "Failed to establish connection or other server error."
           }
         }
       }
@@ -104,17 +119,6 @@
           },
           "404": {
             "description": "Book not found"
-          }
-        }
-      }
-    },
-    "/logger": {
-      "get": {
-        "tags": ["Logging Operations"],
-        "summary": "Returns a hello world message with logging",
-        "responses": {
-          "200": {
-            "description": "Hello world message with logging"
           }
         }
       }
