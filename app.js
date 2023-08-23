@@ -22,29 +22,32 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const routes_1 = require("./routes");
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
-const swaggerDocument = __importStar(require("../swagger.json"));
-const body_parser_1 = __importDefault(require("body-parser"));
-const dbconfig_1 = require("./dbconfig");
+const swaggerDocument = __importStar(require("./swagger.json"));
+const dbconfig_1 = require("./src/persistence/dbconfig");
 const app = (0, express_1.default)();
-app.use(body_parser_1.default.json());
+app.use(express_1.default.json());
+app.use(routes_1.router);
 const port = 3000;
 const olaJson = {
     nombre: "ola",
     edad: 10,
 };
-const data = [
-    {
-        id: 0,
-        name: "book",
-        author: "ola",
-    },
-];
 //Endpoints
 app.get("/", (req, res) => {
     res.send("oli wold desde nodo.js");
@@ -52,39 +55,16 @@ app.get("/", (req, res) => {
 app.post("/otraruta", (req, res) => {
     res.send(olaJson);
 });
-app.route("/test-connection").get((req, res) => {
-    (0, dbconfig_1.connectToDatabase)();
-});
-app
-    .route("/book")
-    .get((req, res) => {
-    res.send(data);
-})
-    .post((req, res) => {
-    const body = req.body;
-    const idExists = data.some((book) => book.id === body.id);
-    if (idExists) {
-        res.status(409).send(`book with id: ${body.id} already exists`);
+app.route("/test-connection").get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield (0, dbconfig_1.connectToDatabase)();
+        res.status(200).send("Connected to database successfully!");
     }
-    else {
-        data.push(body);
-        res.status(201).send(body);
+    catch (error) {
+        res.status(500).send("Unable to connect to the database.");
     }
-})
-    .put((req, res) => {
-    res.send("Update the book");
-});
-app.route("/book/:id").get((req, res) => {
-    const bookParams = parseInt(req.params.id);
-    const findBookById = data.find((book) => book.id === bookParams);
-    if (findBookById) {
-        res.send(findBookById);
-    }
-    else {
-        res.status(404).send(`Book with id: ${bookParams} not found`);
-    }
-});
+}));
 app.use("/swagger", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
+    console.log(`Server running on http://localhost:${port}/swagger/`);
 });

@@ -58,6 +58,7 @@
           }
         }
       },
+
       "post": {
         "tags": ["Books"],
         "summary": "Add a book",
@@ -85,15 +86,6 @@
         "responses": {
           "200": {
             "description": "Add book message"
-          }
-        }
-      },
-      "put": {
-        "tags": ["Books"],
-        "summary": "Update the book",
-        "responses": {
-          "200": {
-            "description": "Update book message"
           }
         }
       }
