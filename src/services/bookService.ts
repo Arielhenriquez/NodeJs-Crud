@@ -24,8 +24,16 @@ export class BookService {
     }
   }
 
-  //Todo: Fill this method
-  editBook() {}
+  editBook(id: number, updatedBook: Book) {
+    const index = books.findIndex((book) => book.id === id);
+    if (index === -1) {
+      throw new Error(`Book with id: ${id} not found`);
+    }
+
+    books[index] = { ...books[index], ...updatedBook, id: id };
+
+    return books[index];
+  }
 
   deleteBook(id: number) {
     const index = books.findIndex((book) => book.id == id);

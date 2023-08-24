@@ -3,7 +3,7 @@
   "info": {
     "version": "1.0.0",
     "title": "Express API with Swagger",
-    "description": "A book CRUD application API"
+    "description": "A book CRUD API"
   },
   "servers": [
     {
@@ -37,7 +37,6 @@
       "get": {
         "tags": ["Test endpoints"],
         "summary": "Test the database connection",
-        "description": "Connects to the database and returns a greeting. Useful for checking if the database connection is working correctly.",
         "responses": {
           "200": {
             "description": "Connection established or greeting returned."
@@ -98,7 +97,6 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "ID of book to fetch",
             "schema": {
               "type": "integer"
             }
@@ -113,6 +111,49 @@
           }
         }
       },
+      "put": {
+        "tags": ["Books"],
+        "summary": "Update a book",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "author": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Book updated successfully"
+          },
+          "404": {
+            "description": "Book not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
       "delete": {
         "tags": ["Books"],
         "summary": "Delete a specific book by id",
@@ -121,7 +162,6 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "ID of book to delete",
             "schema": {
               "type": "integer"
             }

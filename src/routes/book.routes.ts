@@ -30,16 +30,24 @@ router.get("/book/:id", (req, res) => {
 
 router.post("/book", (req: Request, res: Response) => {
   try {
-    const body: Partial<Book> = req.body;
+    const body = req.body;
     const newBook = bookService.addBook(body as Book);
     res.status(201).send(newBook);
   } catch (error: any) {
     console.error("Error while adding book:", error);
-    if (error.message.includes("already exists")) {
-      res.status(409).send(error.message);
-    } else {
-      res.status(500).send("Internal Server Error");
-    }
+    res.status(409).send(error.message);
+  }
+});
+
+router.put("/book/:id", (req: Request, res: Response) => {
+  try {
+    const bookParams = parseInt(req.params.id);
+    const requestBody: Book = req.body;
+    const updatedBook = bookService.editBook(bookParams, requestBody);
+    res.status(200).send(updatedBook);
+  } catch (error: any) {
+    console.error("Error while updating book:", error);
+    res.status(404).send(error.message);
   }
 });
 
