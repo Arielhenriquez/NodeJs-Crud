@@ -1,6 +1,6 @@
-import express, { Router, Request, Response } from "express";
-import { BookService } from "./src/services/bookService";
-import { Book } from "./src/persistence/entities/Book";
+import { Router, Request, Response } from "express";
+import { BookService } from "../services/bookService";
+import { Book } from "../persistence/entities/Book";
 
 const router = Router();
 const bookService = new BookService();
@@ -43,4 +43,4 @@ router.post("/book", (req: Request, res: Response) => {
   }
 });
 
-export { router };
+export const bookRoutes = router;

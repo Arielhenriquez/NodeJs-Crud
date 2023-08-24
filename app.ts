@@ -1,12 +1,13 @@
 import express, { Express, Request, Response } from "express";
-import { router } from "./routes";
+import { bookRoutes } from "./src/routes/book.routes";
 import swaggerUi from "swagger-ui-express";
-import * as swaggerDocument from "./swagger.json";
-import { connectToDatabase } from "./src/persistence/dbconfig";
+const swaggerDocument = require("../swagger.json");
 
+import { connectToDatabase } from "./src/persistence/dbconfig";
+//dist\app.js
 const app: Express = express();
 app.use(express.json());
-app.use(router);
+app.use(bookRoutes);
 const port = 3000;
 
 const olaJson = {
