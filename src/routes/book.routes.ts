@@ -43,4 +43,14 @@ router.post("/book", (req: Request, res: Response) => {
   }
 });
 
+router.delete("/book/:id", (req: Request, res: Response) => {
+  const bookParams = parseInt(req.params.id);
+  const deleteBook = bookService.deleteBook(bookParams);
+  if (deleteBook.message === "Book deleted") {
+    res.status(200).send(deleteBook);
+  } else {
+    res.status(404).send(deleteBook);
+  }
+});
+
 export const bookRoutes = router;

@@ -14,7 +14,7 @@ export class BookService {
     }
   }
 
-  addBook(body: any) {
+  addBook(body: Book) {
     const idExists = books.some((book) => book.id === body.id);
     if (idExists) {
       throw new Error(`book with id: ${body.id} already exists`);
@@ -26,4 +26,13 @@ export class BookService {
 
   //Todo: Fill this method
   editBook() {}
+
+  deleteBook(id: number) {
+    const index = books.findIndex((book) => book.id == id);
+    if (index > -1) {
+      books.splice(index, 1);
+      return { message: "Book deleted", id };
+    }
+    return { message: "Book not found", id };
+  }
 }
