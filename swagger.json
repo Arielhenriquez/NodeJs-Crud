@@ -177,6 +177,7 @@
         }
       }
     },
+
     "/user": {
       "get": {
         "tags": ["Users"],
@@ -191,11 +192,31 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "name": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "userName": {
                         "type": "string"
                       },
-                      "age": {
-                        "type": "integer"
+                      "email": {
+                        "type": "string",
+                        "format": "email"
+                      },
+                      "firstName": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "lastName": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "fullName": {
+                        "type": "string"
+                      },
+                      "isAdmin": {
+                        "type": "boolean",
+                        "default": false
                       }
                     }
                   }
@@ -218,13 +239,31 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": {
+                  "userName": {
                     "type": "string"
                   },
-                  "age": {
-                    "type": "integer"
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "firstName": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "password": {
+                    "type": "string",
+                    "pattern": "^(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$"
+                  },
+                  "isAdmin": {
+                    "type": "boolean",
+                    "default": false
                   }
-                }
+                },
+                "required": ["userName", "email", "password"]
               }
             }
           }
@@ -237,11 +276,31 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "name": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "userName": {
                       "type": "string"
                     },
-                    "age": {
-                      "type": "integer"
+                    "email": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "firstName": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "lastName": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "fullName": {
+                      "type": "string"
+                    },
+                    "isAdmin": {
+                      "type": "boolean",
+                      "default": false
                     }
                   }
                 }
