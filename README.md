@@ -1,2 +1,2 @@
 # NodeJs-Crud
-Crud application with node js express 
+User management application with node js express 
