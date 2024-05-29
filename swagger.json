@@ -177,7 +177,6 @@
         }
       }
     },
-
     "/user": {
       "get": {
         "tags": ["Users"],
@@ -222,10 +221,10 @@
                   }
                 }
               }
+            },
+            "500": {
+              "description": "Internal Server Error"
             }
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       },
@@ -305,10 +304,134 @@
                   }
                 }
               }
+            },
+            "409": {
+              "description": "Conflict or error while adding user"
             }
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "put": {
+        "tags": ["Users"],
+        "summary": "Update a user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "ID of the user to be updated"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userName": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "firstName": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "password": {
+                    "type": "string",
+                    "pattern": "^(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$"
+                  },
+                  "isAdmin": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                },
+                "required": ["userName", "email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "userName": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "firstName": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "lastName": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "fullName": {
+                      "type": "string"
+                    },
+                    "isAdmin": {
+                      "type": "boolean",
+                      "default": false
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "User not found"
+            },
+            "409": {
+              "description": "Conflict or error while updating user"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete a specific user by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "ID of the user to be deleted"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
           },
-          "409": {
-            "description": "Conflict or error while adding user"
+          "404": {
+            "description": "User not found"
           }
         }
       }
