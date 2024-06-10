@@ -5,11 +5,13 @@ import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger.json";
 import dbSetup from "./src/persistence/sequalize/dbSetup";
 import { userRoutes } from "./src/routes/user.routes";
+import passport from "./src/services/passportConfig"; 
 
 const app: Express = express();
 app.use(express.json());
-app.use(bookRoutes);
-app.use(userRoutes);
+app.use(passport.initialize());
+app.use("/api/",bookRoutes);
+app.use("/api/",userRoutes);
 const port = 3000;
 
 const olaJson = {

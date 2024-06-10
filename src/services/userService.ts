@@ -1,15 +1,22 @@
 import { CreateUserDto } from "../dtos/createUserDto";
 import { UpdateUserDto } from "../dtos/updateUserDto";
+import { UserLoginDto } from "../dtos/userLoginDto";
 import {
   validateUpdateUserDTO,
   validateUserDTO,
 } from "../dtos/validateUserDto";
 import { User } from "../persistence/entities/User";
 import bcrypt from "bcrypt";
+import jwt from 'jsonwebtoken';
 
 export async function getAllUsers() {
   const users = await User.findAll();
   return users;
+}
+
+export async function getUserById(id: string){
+  const user = await User.findByPk(id);
+  return user;
 }
 
 export async function createUser(
@@ -86,6 +93,46 @@ export async function deleteUser(id: string) {
     },
   });
 }
+
+
+export async function login(userLogin: UserLoginDto): Promise<string> {
+  let user: any | null = null;
+  // First check by username
+  if (userLogin.userName) {
+    user = await User.findOne({ where: { userName: userLogin.userName } });
+  }
+
+  // If no user found by username, check by email
+  if (!user && userLogin.email) {
+    user = await User.findOne({ where: { email: userLogin.email } });
+  }
+
+  // If user is still not found, throw an error
+  if (!user) {
+    throw new Error('Authentication failed');
+  }
+
+  // Compare provided password with the stored hashed password
+  const passwordMatch = await bcrypt.compare(userLogin.password, user.password);
+  if (!passwordMatch) {
+    throw new Error('Authentication failed');
+  }
+
+  // Generate JWT token
+  const generateToken = (user: any) => {
+    const payload = { sub: user.id };
+    return jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: '1h' });
+  };
+
+  const token = generateToken(user);
+  console.log(`Generated JWT: ${token}`);
+
+  return token;
+}
+
+
+
+
 /*Todo: Manejar errores en cada metodo que llame a la BD.
  Hacer endpoint login, que devuelva JWT, Integrar auth con passport. 
  Validar password que se guarde como hash en BD pero cuando se haga login sea con la password original..

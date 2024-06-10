@@ -1,19 +1,24 @@
 import { Router, Request, Response } from "express";
 import { BookService } from "../services/bookService";
 import { Book } from "../persistence/entities/Book";
+import passport from "passport";
 
 const router = Router();
 const bookService = new BookService();
 
-router.get("/book", (req: Request, res: Response) => {
-  try {
-    const books = bookService.getBooks();
-    res.status(200).send(books);
-  } catch (error: any) {
-    console.error("Error while fetching books:", error);
-    res.status(500).send("Internal Server Error");
+router.get(
+  "/book",
+  passport.authenticate("jwt", { session: false }),
+  (req: Request, res: Response) => {
+    try {
+      const books = bookService.getBooks();
+      res.status(200).send(books);
+    } catch (error: any) {
+      console.error("Error while fetching books:", error);
+      res.status(500).send("Internal Server Error");
+    }
   }
-});
+);
 
 router.get("/book/:id", (req, res) => {
   try {

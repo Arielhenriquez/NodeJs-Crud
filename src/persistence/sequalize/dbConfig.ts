@@ -1,8 +1,9 @@
-import { Sequelize } from "sequelize";
+import { Dialect, Sequelize } from "sequelize";
+require('dotenv').config();
 
-const dbConfig = new Sequelize("waldodb", "postgres", "waldodb", {
-  host: "localhost",
-  dialect: "postgres",
+const dbConfig = new Sequelize(process.env.DATABASE_NAME as string, process.env.DATABASE_USERNAME as string, process.env.DATABASE_PASSWORD, {
+  host: process.env.DATABASE_HOST,
+  dialect: process.env.DATABASE_TYPE as Dialect,
 });
 
 export const connectToDatabase = async () => {
